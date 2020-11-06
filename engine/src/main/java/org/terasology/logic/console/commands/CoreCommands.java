@@ -6,7 +6,7 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Streams;
 import org.terasology.assets.ResourceUrn;
 import org.terasology.assets.management.AssetManager;
-import org.terasology.config.Config;
+import org.terasology.config.SystemConfig;
 import org.terasology.engine.GameEngine;
 import org.terasology.engine.SimpleUri;
 import org.terasology.engine.TerasologyConstants;
@@ -36,11 +36,9 @@ import org.terasology.logic.console.suggesters.CommandNameSuggester;
 import org.terasology.logic.console.suggesters.ScreenSuggester;
 import org.terasology.logic.console.suggesters.SkinSuggester;
 import org.terasology.logic.inventory.events.DropItemEvent;
-import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.math.Direction;
-import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.naming.Name;
 import org.terasology.network.ClientComponent;
@@ -127,7 +125,7 @@ public class CoreCommands extends BaseComponentSystem {
     private TranslationSystem translationSystem;
 
     @In
-    private Config config;
+    private SystemConfig systemConfig;
 
     @In
     private ModuleManager moduleManager;
@@ -285,7 +283,7 @@ public class CoreCommands extends BaseComponentSystem {
 
         // Try if language exists
         if (proj.getAvailableLocales().contains(locale)) {
-            config.getSystem().setLocale(locale);
+            systemConfig.locale.set(locale);
             nuiManager.invalidate();
             String nat = translationSystem.translate("${engine:menu#this-language-native}", locale);
             String eng = translationSystem.translate("${engine:menu#this-language-English}", locale);

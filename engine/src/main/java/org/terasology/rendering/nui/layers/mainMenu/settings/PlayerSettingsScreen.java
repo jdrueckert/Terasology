@@ -20,6 +20,7 @@ import com.google.common.base.Functions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.math.DoubleMath;
+import org.terasology.config.SystemConfig;
 import org.terasology.context.Context;
 import org.terasology.engine.subsystem.rpc.DiscordRPCSubSystem;
 import org.terasology.identity.storageServiceClient.StorageServiceWorker;
@@ -66,6 +67,8 @@ public class PlayerSettingsScreen extends CoreScreenLayer {
     private Context context;
     @In
     private Config config;
+    @In
+    private SystemConfig systemConfig;
     @In
     private TranslationSystem translationSystem;
     @In
@@ -115,7 +118,7 @@ public class PlayerSettingsScreen extends CoreScreenLayer {
             discordPresence.setChecked(config.getPlayer().isDiscordPresence());
         }
         if (language != null) {
-            language.setSelection(config.getSystem().getLocale());
+            language.setSelection(systemConfig.locale.get());
         }
         updateImage();
     }
@@ -328,8 +331,8 @@ public class PlayerSettingsScreen extends CoreScreenLayer {
             config.getPlayer().setHasEnteredUsername(true);
             DiscordRPCSubSystem.updateState();
         }
-        if (!config.getSystem().getLocale().equals(language.getSelection())) {
-            config.getSystem().setLocale(language.getSelection());
+        if (!systemConfig.locale.get().equals(language.getSelection())) {
+            systemConfig.locale.set(language.getSelection());
             getManager().invalidate();
         }
     }
